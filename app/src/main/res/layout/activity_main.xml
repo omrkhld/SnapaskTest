@@ -3,14 +3,120 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="omrkhld.com.snapasktest.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        card_view:cardElevation="10dp"
+        android:onClick="goToQuestion"
+        android:id="@+id/question_card">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:minHeight="75dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/header_title"
+                android:textSize="18sp"
+                android:background="@color/colorAccent"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="#FFF"
+                android:text="Question 1"/>
+
+            <TextView
+                android:id="@+id/question_subject"
+                style="@style/CardTextBoldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/header_title"
+                android:padding="5dp"
+                android:text="Subject: Geography"/>
+
+            <TextView
+                android:id="@+id/asked_by"
+                style="@style/CardTextBoldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/question_subject"
+                android:padding="5dp"
+                android:text="Asked by: orangeladybug329"/>
+
+            <TextView
+                android:id="@+id/answered_by"
+                style="@style/CardTextBoldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/asked_by"
+                android:padding="5dp"
+                android:text="Answered by: heavybutterfly920"/>
+
+            <TextView
+                android:id="@+id/created_date"
+                style="@style/CardTextBoldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/answered_by"
+                android:padding="5dp"
+                android:text="Created at: 28 Jan 2016, 16:51"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/question_card"
+        android:layout_marginTop="10dp"
+        card_view:cardElevation="10dp"
+        android:onClick="goToUser"
+        android:id="@+id/user_card">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:minHeight="75dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/header_user"
+                android:textSize="18sp"
+                android:background="@color/colorAccent"
+                android:paddingLeft="10dp"
+                android:gravity="center_vertical"
+                android:textColor="#FFF"
+                android:text="User 1"/>
+
+            <TextView
+                android:id="@+id/username"
+                style="@style/CardTextBoldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/header_user"
+                android:padding="5dp"
+                android:text="Username: greenbear131"/>
+
+            <TextView
+                android:id="@+id/role"
+                style="@style/CardTextBoldStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/username"
+                android:padding="5dp"
+                android:text="Role: Tutor"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>
