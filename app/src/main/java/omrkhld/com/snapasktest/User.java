@@ -15,7 +15,7 @@ public class User implements Serializable {
     private int ID;
     private String gender;
 
-    private static class Name implements Serializable {
+    public static class Name implements Serializable {
 
         public Name() {
         }
@@ -34,7 +34,7 @@ public class User implements Serializable {
     private int registered, dob;
     private String school, country_code, phone, imgURL;
 
-    private static class Role implements Serializable {
+    public static class Role implements Serializable {
 
         public Role() {
         }

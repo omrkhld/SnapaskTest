@@ -1,6 +1,7 @@
 package omrkhld.com.snapasktest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,21 +9,21 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class QuestionActivity extends AppCompatActivity {
 
@@ -33,20 +34,38 @@ public class QuestionActivity extends AppCompatActivity {
     private Question question = null;
     private boolean loaded = false;
 
+    @Bind(R.id.asker_name) TextView askerName;
+    @Bind(R.id.answer_name) TextView answerName;
+    @Bind(R.id.asker_img) CircularImageView askerImg;
+    @Bind(R.id.answer_img) CircularImageView answerImg;
+    @Bind(R.id.question_img) ImageView questionImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questionnaire);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            qID = extras.getString("qID");
-        }
+        setContentView(R.layout.activity_question);
+        ButterKnife.bind(this);
 
         Calendar cal = Calendar.getInstance();
         sdf = new SimpleDateFormat("HH:mm:ss");
         currentTime = sdf.format(cal.getTime());
-        new DownloadQuestion().execute();
+
+        onNewIntent(getIntent());
+    }
+
+    protected void onNewIntent(Intent intent) {
+        String action = intent.getAction();
+        String data = intent.getDataString();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            qID = extras.getString("qID");
+            new DownloadQuestion().execute();
+        } else {
+            qID = data.split("/")[3];
+            if (Intent.ACTION_VIEW.equals(action) && !qID.isEmpty()) {
+                new DownloadQuestion().execute();
+            }
+        }
     }
 
     //Checks if there's internet connection
@@ -69,7 +88,7 @@ public class QuestionActivity extends AppCompatActivity {
                 }
 
                 Log.e(TAG, "Diff: " + diff);
-                if ((diff > 0 && diff < 60000) || !hasConnection()) { // less than 1 minute, still fresh
+                if ((diff != 0 && diff < 60000)|| !hasConnection()) { // less than 1 minute, still fresh
                     Log.e(TAG, "Cache still fresh or no connection");
                     // download from storage if possible
                     ObjectStorage<Question> objectStorage = new ObjectStorage<Question>(Question.class, QuestionActivity.this);
@@ -87,8 +106,9 @@ public class QuestionActivity extends AppCompatActivity {
                     try {
                         ObjectMapper mapper = new ObjectMapper();
                         question = mapper.readValue(new URL("https://api.myjson.com/bins/" + qID), Question.class);
-                    } catch (IOException e) {
+                    } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                        return null;
                     }
                 }
                 return question;
@@ -104,6 +124,17 @@ public class QuestionActivity extends AppCompatActivity {
                 editor.putString(qID, currentTime);
                 editor.apply();
                 saveQuestion(q);
+
+                Picasso.with(getBaseContext()).load(q.getData().getAskedBy().getImgURL()).into(askerImg);
+                Picasso.with(getBaseContext()).load(q.getData().getAnsweredBy().getImgURL()).into(answerImg);
+                Picasso.with(getBaseContext()).load(q.getData().getImgURL()).into(questionImg);
+                askerName.setText(q.getData().getAskedBy().getUsername());
+                answerName.setText(q.getData().getAnsweredBy().getUsername());
+            }
+
+            if (q == null) {
+                //show error page
+                setContentView(R.layout.activity_error);
             }
         }
     }

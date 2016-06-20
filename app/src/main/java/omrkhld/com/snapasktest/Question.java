@@ -13,14 +13,14 @@ public class Question implements Serializable {
     }
 
     private String status;
-    private static class Data implements Serializable {
+    public static class Data implements Serializable {
 
         public Data() {
         }
 
         private int ID;
 
-        private static class AskedBy implements Serializable {
+        public static class AskedBy implements Serializable {
 
             public AskedBy() {
             }
@@ -66,7 +66,7 @@ public class Question implements Serializable {
         private String user_ID;
         private String answer_tutor_ID;
 
-        private static class AnsweredBy implements Serializable {
+        public static class AnsweredBy implements Serializable {
 
             public AnsweredBy() {
             }
@@ -111,7 +111,7 @@ public class Question implements Serializable {
         private AnsweredBy answeredBy;
         private String createdAt;
 
-        private static class Subject implements Serializable {
+        public static class Subject implements Serializable {
 
             public Subject() {
             }
@@ -120,7 +120,7 @@ public class Question implements Serializable {
             private String abbr;
             private String description;
 
-            private static class Region implements Serializable {
+            public static class Region implements Serializable {
 
                 public Region() {
                 }
